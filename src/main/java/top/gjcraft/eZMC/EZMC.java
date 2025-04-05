@@ -1,0 +1,49 @@
+package top.gjcraft.eZMC;
+
+import org.bukkit.plugin.java.JavaPlugin;
+import top.gjcraft.eZMC.commands.EZMCCommand;
+import top.gjcraft.eZMC.listeners.*;
+
+public final class EZMC extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        // 保存默认配置文件
+        saveDefaultConfig();
+
+        // 创建PlayerRescueManager实例
+        PlayerRescueManager rescueManager = new PlayerRescueManager(getConfig(), this);
+
+        // 注册监听器
+        getServer().getPluginManager().registerEvents(new MobEnhancementListener(getConfig(), this), this);
+        getServer().getPluginManager().registerEvents(new EnvironmentHazardsListener(getConfig(), this), this);
+        getServer().getPluginManager().registerEvents(new PlayerDebuffsListener(getConfig(), this), this);
+        getServer().getPluginManager().registerEvents(new BlockDropListener(getConfig(), this), this);
+        getServer().getPluginManager().registerEvents(rescueManager, this);
+        getServer().getPluginManager().registerEvents(new PlayerHealthManager(getConfig(), this, rescueManager), this);
+
+        // 注册命令执行器
+        getCommand("ezmc").setExecutor(new EZMCCommand(this, rescueManager));
+
+        // 初始化并启动怪物生成任务
+        MobSpawnListener mobSpawnListener = new MobSpawnListener(getConfig(), this);
+        mobSpawnListener.startSpawnTask();
+
+        // 注册怪物追踪火把玩家的监听器
+        getServer().getPluginManager().registerEvents(new MobTorchTrackingListener(getConfig(), this), this);
+
+        // 初始化并启动永夜任务
+        WorldTimeListener worldTimeListener = new WorldTimeListener(getConfig(), this);
+        worldTimeListener.startTimeTask();
+
+        getLogger().info("EZMC插件已启动");
+        getLogger().info("作者: gjyyds1");
+        getLogger().info("难度增强系统已加载");
+    }
+
+    @Override
+    public void onDisable() {
+        getLogger().info("EZMC插件已关闭");
+        saveConfig();
+    }
+}

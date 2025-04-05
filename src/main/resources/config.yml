@@ -1,0 +1,113 @@
+# EZMC 配置文件
+
+# 永夜设置
+world-settings:
+  eternal-night:
+    enabled: true
+    # 固定时间（tick，设置为18000为永夜）
+    fixed-time: 18000
+
+# 怪物生成设置
+mob-spawn:
+  enabled: true
+  # 生成间隔（秒）
+  spawn-interval: 300
+  # 每次生成数量
+  spawn-amount: 3
+  # 生成半径（格）
+  spawn-radius: 20
+
+# 生物属性增强
+mob-enhancement:
+  enabled: true
+  # 生物血量倍率 (默认1.5倍)
+  health-multiplier: 1.5
+  # 生物攻击力倍率 (默认1.3倍)
+  damage-multiplier: 1.3
+  # 生物移动速度倍率 (默认1.2倍)
+  speed-multiplier: 1.2
+  # 火把追踪设置
+  torch-tracking:
+    enabled: true
+    # 追踪范围（格）
+    tracking-range: 32
+    # 追踪速度倍率
+    tracking-speed-multiplier: 1.5
+
+# 环境危险性
+environment-hazards:
+  enabled: true
+  # 摔落伤害倍率 (默认1.5倍)
+  fall-damage-multiplier: 1.5
+  # 火焰伤害倍率 (默认1.3倍)
+  fire-damage-multiplier: 1.3
+  # 饥饿值消耗速度倍率 (默认1.2倍)
+  hunger-rate-multiplier: 1.2
+
+# 玩家debuff效果
+player-debuffs:
+  enabled: true
+  # 挖掘疲劳效果
+  mining-fatigue:
+    enabled: true
+    # 效果等级 (0-255)
+    level: 1
+    # 持续时间（秒）
+    duration: 30
+    # 触发概率 (0.0-1.0)
+    chance: 0.3
+  # 虚弱效果
+  weakness:
+    enabled: true
+    level: 1
+    duration: 20
+    chance: 0.2
+
+# 玩家生命值设置
+player-health:
+  # 是否启用玩家生命值调整
+  enabled: true
+  # 初始最大生命值
+  initial-health: 6
+  # 每升级多少级增加生命值
+  level-increment: 5
+  # 每次增加的生命值
+  health-per-increment: 2
+  # 最大生命值上限
+  max-health: 20
+
+# 玩家救援系统设置
+player-rescue:
+  # 是否启用救援系统
+  enabled: true
+  # 救援范围（格）
+  rescue-range: 2.0
+  # 救援所需时间（秒）
+  rescue-time: 5
+  # 倒地超时时间（秒，超时后自动死亡）
+  downed-timeout: 120
+
+# 方块掉落设置
+block-drops:
+  # 是否启用方块掉落控制
+  enabled: true
+  # 默认掉落概率 (0.0-1.0)
+  default-chance: 1.0
+  # 特定物品配置
+  materials:
+    # 示例：钻石矿石
+    diamond_ore:
+      # 掉落概率 (0.0-1.0)
+      chance: 0.5
+      # 掉落数量控制
+      amount:
+        # 最小数量
+        min: 1
+        # 最大数量
+        max: 3
+    # 示例：金矿石
+    gold_ore:
+      chance: 0.7
+      amount:
+        min: 1
+        max: 2

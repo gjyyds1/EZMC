@@ -1,0 +1,18 @@
+name: EZMC
+version: '1.0.0-SNAPSHOT'
+main: top.gjcraft.eZMC.EZMC
+api-version: '1.21'
+load: POSTWORLD
+authors: [ gjyyds1 ]
+description: Minecraft简直太简单了不是吗? 让它来给你的Minecraft加点猛料吧!
+
+commands:
+  ezmc:
+    description: EZMC插件主命令
+    usage: /ezmc <giveup|reload>
+    aliases: [ez]
+
+permissions:
+  ezmc.admin.reload:
+    description: 允许重载插件配置
+    default: op
