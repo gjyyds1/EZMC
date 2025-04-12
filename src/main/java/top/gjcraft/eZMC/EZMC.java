@@ -2,7 +2,10 @@ package top.gjcraft.eZMC;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import top.gjcraft.eZMC.commands.EZMCCommand;
+import top.gjcraft.eZMC.config.ConfigUpdater;
 import top.gjcraft.eZMC.listeners.*;
+
+import java.io.File;
 
 public final class EZMC extends JavaPlugin {
 
@@ -10,6 +13,13 @@ public final class EZMC extends JavaPlugin {
     public void onEnable() {
         // 保存默认配置文件
         saveDefaultConfig();
+        
+        // 检查并更新配置文件
+        File configFile = new File(getDataFolder(), "config.yml");
+        ConfigUpdater configUpdater = new ConfigUpdater(this, configFile, getConfig(), 1.0);
+        if (configUpdater.checkAndUpdate()) {
+            reloadConfig();
+        }
 
         // 创建PlayerRescueManager实例
         PlayerRescueManager rescueManager = new PlayerRescueManager(getConfig(), this);
