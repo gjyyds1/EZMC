@@ -86,6 +86,10 @@ player-rescue:
   rescue-time: 5
   # 倒地超时时间（秒，超时后自动死亡）
   downed-timeout: 120
+  # 倒地状态是否可以移动视角
+  allow-look-around: true
+  # 倒地状态时的姿势
+  downed-pose: "SWIMMING"
 
 # 方块掉落设置
 block-drops:

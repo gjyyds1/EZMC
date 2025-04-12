@@ -6,11 +6,13 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import top.gjcraft.eZMC.utils.ThreadPoolManager;
@@ -29,10 +31,12 @@ public class PlayerRescueManager implements Listener {
     private final Map<UUID, BukkitTask> rescueTasks;
     private final Map<UUID, Player> rescuers;
     private final Map<UUID, BossBar> rescueProgressBars;
+
     private final double rescueRange;
     private final int rescueTime;
     private final int downedTimeout;
     private final Map<UUID, BukkitTask> downedTasks;
+    private final boolean allowLookAround;
 
     public PlayerRescueManager(FileConfiguration config, Plugin plugin) {
         this.plugin = plugin;
@@ -41,12 +45,14 @@ public class PlayerRescueManager implements Listener {
         this.rescueRange = config.getDouble("player-rescue.rescue-range", 2.0);
         this.rescueTime = config.getInt("player-rescue.rescue-time", 5);
         this.downedTimeout = config.getInt("player-rescue.downed-timeout", 120);
+        this.allowLookAround = config.getBoolean("player-rescue.allow-look-around", true);
         this.downedTasks = new HashMap<>();
         this.threadPoolManager = ThreadPoolManager.getInstance(plugin);
         this.downedPlayers = new HashMap<>();
         this.rescueTasks = new HashMap<>();
         this.rescuers = new HashMap<>();
         this.rescueProgressBars = new HashMap<>();
+
     }
 
     @EventHandler
@@ -79,6 +85,11 @@ public class PlayerRescueManager implements Listener {
             if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
                 event.setCancelled(true);
                 return;
+            }
+            // 如果不允许视角移动，则限制视角
+            if (!allowLookAround && (from.getYaw() != to.getYaw() || from.getPitch() != to.getPitch())) {
+                to.setYaw(from.getYaw());
+                to.setPitch(from.getPitch());
             }
         }
 
@@ -161,6 +172,13 @@ public class PlayerRescueManager implements Listener {
     private void setPlayerDowned(Player player, boolean downed) {
         UUID playerId = player.getUniqueId();
         downedPlayers.put(playerId, downed);
+        
+        if (downed) {
+            // 设置玩家为游泳姿势
+            player.setSwimming(true);
+        } else {
+            // 取消玩家的游泳姿势
+            player.setSwimming(false);
 
         if (downed) {
             // 开始倒地计时
@@ -176,6 +194,7 @@ public class PlayerRescueManager implements Listener {
             if (task != null) {
                 task.cancel();
             }
+        }
         }
     }
 
