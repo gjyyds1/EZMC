@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import top.gjcraft.eZMC.managers.DoomNightManager;
 import top.gjcraft.eZMC.utils.ThreadPoolManager;
 
 import java.util.ArrayList;
@@ -24,8 +25,9 @@ public class MobSpawnListener {
     private final List<EntityType> allowedMobs;
     private final Random random;
     private final ThreadPoolManager threadPoolManager;
+    private final DoomNightManager doomNightManager;
 
-    public MobSpawnListener(FileConfiguration config, Plugin plugin) {
+    public MobSpawnListener(FileConfiguration config, Plugin plugin, DoomNightManager doomNightManager) {
         this.plugin = plugin;
         this.config = config;
         this.enabled = config.getBoolean("mob-spawn.enabled", true);
@@ -34,6 +36,7 @@ public class MobSpawnListener {
         this.spawnRadius = config.getInt("mob-spawn.spawn-radius", 20);
         this.random = new Random();
         this.threadPoolManager = ThreadPoolManager.getInstance(plugin);
+        this.doomNightManager = doomNightManager;
         this.allowedMobs = new ArrayList<>();
         
         // 添加默认允许生成的怪物类型
@@ -64,7 +67,8 @@ public class MobSpawnListener {
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
 
-        for (int i = 0; i < spawnAmount; i++) {
+        int actualSpawnAmount = (int) (spawnAmount * doomNightManager.getSpawnAmountMultiplier());
+        for (int i = 0; i < actualSpawnAmount; i++) {
             // 在玩家周围随机选择一个位置
             double angle = random.nextDouble() * 2 * Math.PI;
             double distance = random.nextDouble() * spawnRadius;

@@ -10,6 +10,40 @@ world-settings:
     # 固定时间（tick，设置为18000为永夜）
     fixed-time: 18000
 
+# 灾厄之夜设置
+doom-night:
+  enabled: true
+  # 开始触发的天数
+  start-day: 10
+  # 持续天数
+  duration: 3
+  # 怪物生命值倍率
+  mob-health-multiplier: 2.0
+  # 怪物攻击力倍率
+  mob-damage-multiplier: 2.0
+  # 怪物移动速度倍率
+  mob-speed-multiplier: 1.5
+  # 怪物生成数量倍率
+  spawn-amount-multiplier: 2.0
+
+# 烈日凌空事件设置
+sunlight-event:
+  enabled: true
+  # 检查间隔（秒）
+  check-interval: 300
+  # 燃烧延迟（秒）
+  burn-delay: 3
+  # 事件持续时间（秒）
+  burn-duration: 30
+  # 触发概率（0.0-1.0）
+  trigger-chance: 0.3
+  # 透明方块列表（阳光可以穿过的方块）
+  transparent-blocks:
+    - AIR
+    - GLASS
+    - GLASS_PANE
+    - TINTED_GLASS
+
 # 怪物生成设置
 mob-spawn:
   enabled: true
