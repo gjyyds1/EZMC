@@ -1,5 +1,5 @@
 name: EZMC
-version: '1.0.0-SNAPSHOT'
+version: '1.3.0-SNAPSHOT'
 main: top.gjcraft.eZMC.EZMC
 api-version: '1.21'
 load: POSTWORLD
