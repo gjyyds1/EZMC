@@ -28,33 +28,33 @@ public class DatabaseManager {
         try (Statement stmt = connection.createStatement()) {
             // 创建玩家状态表
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS player_states (
-                    uuid TEXT PRIMARY KEY,
-                    max_health DOUBLE,
-                    current_health DOUBLE,
-                    is_downed BOOLEAN,
-                    downed_time BIGINT
-                )
-            """);
+                        CREATE TABLE IF NOT EXISTS player_states (
+                            uuid TEXT PRIMARY KEY,
+                            max_health DOUBLE,
+                            current_health DOUBLE,
+                            is_downed BOOLEAN,
+                            downed_time BIGINT
+                        )
+                    """);
 
             // 创建世界状态表
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS world_states (
-                    world_name TEXT PRIMARY KEY,
-                    is_eternal_night BOOLEAN,
-                    is_doom_night BOOLEAN,
-                    doom_night_start_time BIGINT
-                )
-            """);
+                        CREATE TABLE IF NOT EXISTS world_states (
+                            world_name TEXT PRIMARY KEY,
+                            is_eternal_night BOOLEAN,
+                            is_doom_night BOOLEAN,
+                            doom_night_start_time BIGINT
+                        )
+                    """);
 
             // 创建事件状态表
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS event_states (
-                    event_name TEXT PRIMARY KEY,
-                    last_trigger_time BIGINT,
-                    is_active BOOLEAN
-                )
-            """);
+                        CREATE TABLE IF NOT EXISTS event_states (
+                            event_name TEXT PRIMARY KEY,
+                            last_trigger_time BIGINT,
+                            is_active BOOLEAN
+                        )
+                    """);
         }
     }
 

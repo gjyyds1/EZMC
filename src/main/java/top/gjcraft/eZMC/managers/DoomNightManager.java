@@ -1,11 +1,12 @@
 package top.gjcraft.eZMC.managers;
 
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.LivingEntity;
 import top.gjcraft.eZMC.utils.ThreadPoolManager;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,8 +67,8 @@ public class DoomNightManager {
 
     private void activateDoomNight() {
         isDoomNightActive = true;
-        plugin.getServer().broadcastMessage("§c灾厄之夜降临！怪物变得更加强大！");
-        
+        plugin.getServer().broadcastMessage(ChatColor.RED + "灾厄之夜降临！怪物变得更加强大！");
+
         // 增强所有现存的怪物
         for (World world : plugin.getServer().getWorlds()) {
             for (LivingEntity entity : world.getLivingEntities()) {
@@ -80,22 +81,22 @@ public class DoomNightManager {
 
     private void deactivateDoomNight() {
         isDoomNightActive = false;
-        plugin.getServer().broadcastMessage("§a灾厄之夜结束了！");
+        plugin.getServer().broadcastMessage(ChatColor.GREEN + "灾厄之夜结束了！");
     }
 
     private void enhanceMob(Monster monster) {
         // 增强怪物属性
         monster.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
-            monster.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * mobHealthMultiplier
+                monster.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * mobHealthMultiplier
         );
         monster.setHealth(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 
         monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(
-            monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * mobDamageMultiplier
+                monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * mobDamageMultiplier
         );
 
         monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(
-            monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue() * mobSpeedMultiplier
+                monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue() * mobSpeedMultiplier
         );
     }
 

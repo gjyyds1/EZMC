@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.plugin.Plugin;
 import top.gjcraft.eZMC.utils.ThreadPoolManager;
 
@@ -80,15 +80,15 @@ public class PlayerHealthManager implements Listener {
             int level = player.getLevel();
             int increments = level / levelIncrement;
             double newMaxHealth = initialHealth + (increments * healthPerIncrement);
-            
+
             // 确保不超过配置的最大值
             double finalMaxHealth = Math.min(newMaxHealth, maxHealth);
-            
+
             // 在主线程中更新玩家属性
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 // 设置新的最大生命值
                 attribute.setBaseValue(finalMaxHealth);
-                
+
                 // 如果当前生命值超过新的最大值，将其调整为最大值
                 if (player.getHealth() > finalMaxHealth) {
                     player.setHealth(finalMaxHealth);

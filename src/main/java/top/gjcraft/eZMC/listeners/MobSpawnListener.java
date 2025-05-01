@@ -38,7 +38,7 @@ public class MobSpawnListener {
         this.threadPoolManager = ThreadPoolManager.getInstance(plugin);
         this.doomNightManager = doomNightManager;
         this.allowedMobs = new ArrayList<>();
-        
+
         // 添加默认允许生成的怪物类型
         allowedMobs.add(EntityType.ZOMBIE);
         allowedMobs.add(EntityType.SKELETON);

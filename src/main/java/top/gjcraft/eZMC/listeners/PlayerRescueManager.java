@@ -1,18 +1,17 @@
 package top.gjcraft.eZMC.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.boss.BossBar;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import top.gjcraft.eZMC.utils.ThreadPoolManager;
@@ -57,11 +56,10 @@ public class PlayerRescueManager implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
-        if (!enabled || !(event.getEntity() instanceof Player)) {
+        if (!enabled || !(event.getEntity() instanceof Player player)) {
             return;
         }
 
-        Player player = (Player) event.getEntity();
         double finalDamage = event.getFinalDamage();
         double currentHealth = player.getHealth();
 
@@ -69,6 +67,7 @@ public class PlayerRescueManager implements Listener {
             event.setCancelled(true);
             setPlayerDowned(player, true);
             player.setHealth(1.0);
+            Bukkit.broadcastMessage(ChatColor.RED + player.getName() + ChatColor.YELLOW + " 倒地了，需要救援！");
         }
     }
 
@@ -113,9 +112,9 @@ public class PlayerRescueManager implements Listener {
         if (rescueTasks.containsKey(downedPlayerId)) return;
 
         BossBar progressBar = Bukkit.createBossBar(
-            "正在救援 " + downedPlayer.getName(),
-            BarColor.GREEN,
-            BarStyle.SOLID
+                ChatColor.GREEN + "正在救援 " + downedPlayer.getName(),
+                BarColor.GREEN,
+                BarStyle.SOLID
         );
         progressBar.addPlayer(rescuer);
         progressBar.addPlayer(downedPlayer);
@@ -124,8 +123,8 @@ public class PlayerRescueManager implements Listener {
         rescuers.put(downedPlayerId, rescuer);
 
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
-            private int progress = 0;
             private final int maxProgress = rescueTime * 20; // 转换为tick
+            private int progress = 0;
 
             @Override
             public void run() {
@@ -158,9 +157,9 @@ public class PlayerRescueManager implements Listener {
     }
 
     private void completeRescue(Player player) {
-        UUID playerId = player.getUniqueId();
         setPlayerDowned(player, false);
         player.setHealth(player.getMaxHealth() * 0.5); // 恢复50%的生命值
+        Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + ChatColor.YELLOW + " 已被救起！");
 
         cancelRescue(player);
     }
@@ -172,15 +171,10 @@ public class PlayerRescueManager implements Listener {
     private void setPlayerDowned(Player player, boolean downed) {
         UUID playerId = player.getUniqueId();
         downedPlayers.put(playerId, downed);
-        
+
         if (downed) {
             // 设置玩家为游泳姿势
             player.setSwimming(true);
-        } else {
-            // 取消玩家的游泳姿势
-            player.setSwimming(false);
-
-        if (downed) {
             // 开始倒地计时
             BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (isPlayerDowned(player)) {
@@ -189,19 +183,20 @@ public class PlayerRescueManager implements Listener {
             }, downedTimeout * 20L);
             downedTasks.put(playerId, task);
         } else {
+            // 取消玩家的游泳姿势
+            player.setSwimming(false);
             // 取消倒地计时
             BukkitTask task = downedTasks.remove(playerId);
             if (task != null) {
                 task.cancel();
             }
         }
-        }
     }
 
     public void handleGiveup(Player player) {
-        UUID playerId = player.getUniqueId();
         setPlayerDowned(player, false);
         cancelRescue(player);
+        Bukkit.broadcastMessage(ChatColor.DARK_RED + player.getName() + ChatColor.RED + " 不治身亡...");
         player.setHealth(0); // 直接死亡
     }
 }

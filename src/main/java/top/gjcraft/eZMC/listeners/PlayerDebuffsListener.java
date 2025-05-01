@@ -6,9 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.plugin.Plugin;
 import top.gjcraft.eZMC.utils.ThreadPoolManager;
 
 import java.util.Random;
@@ -63,11 +63,11 @@ public class PlayerDebuffsListener implements Listener {
             Player player = event.getPlayer();
             if (random.nextDouble() < miningFatigueChance) {
                 plugin.getServer().getScheduler().runTask(plugin, () ->
-                    player.addPotionEffect(new PotionEffect(
-                        PotionEffectType.MINING_FATIGUE,
-                        miningFatigueDuration,
-                        miningFatigueLevel - 1
-                    )));
+                        player.addPotionEffect(new PotionEffect(
+                                PotionEffectType.MINING_FATIGUE,
+                                miningFatigueDuration,
+                                miningFatigueLevel - 1
+                        )));
             }
         }, threadPoolManager.getExecutorService());
     }
@@ -82,11 +82,11 @@ public class PlayerDebuffsListener implements Listener {
             Player player = (Player) event.getDamager();
             if (random.nextDouble() < weaknessChance) {
                 plugin.getServer().getScheduler().runTask(plugin, () ->
-                    player.addPotionEffect(new PotionEffect(
-                        PotionEffectType.WEAKNESS,
-                        weaknessDuration,
-                        weaknessLevel - 1
-                    )));
+                        player.addPotionEffect(new PotionEffect(
+                                PotionEffectType.WEAKNESS,
+                                weaknessDuration,
+                                weaknessLevel - 1
+                        )));
             }
         }, threadPoolManager.getExecutorService());
     }

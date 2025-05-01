@@ -14,7 +14,7 @@ public final class EZMC extends JavaPlugin {
     public void onEnable() {
         // 保存默认配置文件
         saveDefaultConfig();
-        
+
 
         // 创建PlayerRescueManager实例
         PlayerRescueManager rescueManager = new PlayerRescueManager(getConfig(), this);

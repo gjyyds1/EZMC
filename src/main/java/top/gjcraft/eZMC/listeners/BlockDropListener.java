@@ -34,7 +34,7 @@ public class BlockDropListener implements Listener {
 
         Material blockType = event.getBlock().getType();
         String configPath = "block-drops.materials." + blockType.name().toLowerCase();
-        
+
         // 异步计算掉落概率和数量
         CompletableFuture.runAsync(() -> {
             // 如果该方块类型没有配置掉落概率，使用默认概率
@@ -54,22 +54,22 @@ public class BlockDropListener implements Listener {
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
                     event.setDropItems(false);
                     Collection<ItemStack> drops = event.getBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand());
-                    
+
                     // 异步计算每个掉落物的数量
                     for (ItemStack drop : drops) {
                         int originalAmount = drop.getAmount();
                         int minAmount = config.getInt(configPath + ".amount.min", originalAmount);
                         int maxAmount = config.getInt(configPath + ".amount.max", originalAmount);
-                        
+
                         // 确保最小值不大于最大值
                         minAmount = Math.min(minAmount, maxAmount);
-                        
+
                         // 在最小值和最大值之间随机选择一个数量
                         int finalAmount = minAmount;
                         if (maxAmount > minAmount) {
                             finalAmount += random.nextInt(maxAmount - minAmount + 1);
                         }
-                        
+
                         if (finalAmount > 0) {
                             final int dropAmount = finalAmount;
                             ItemStack finalDrop = drop.clone();

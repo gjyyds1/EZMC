@@ -38,28 +38,28 @@ public class MobEnhancementListener implements Listener {
         }
 
         LivingEntity entity = event.getEntity();
-        
+
         // 异步计算属性值
         CompletableFuture.runAsync(() -> {
             // 计算新的属性值
             double baseHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             double newHealth = baseHealth * healthMultiplier;
-            
+
             double baseDamage = entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
             double newDamage = baseDamage * damageMultiplier;
-            
+
             double baseSpeed = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
             double newSpeed = baseSpeed * speedMultiplier;
-            
+
             // 在主线程中更新实体属性
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 // 更新生命值
                 entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(newHealth);
                 entity.setHealth(newHealth);
-                
+
                 // 更新攻击力
                 entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(newDamage);
-                
+
                 // 更新移动速度
                 entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(newSpeed);
             });

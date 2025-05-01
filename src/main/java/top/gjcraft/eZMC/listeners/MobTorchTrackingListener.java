@@ -3,7 +3,6 @@ package top.gjcraft.eZMC.listeners;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,11 +38,11 @@ public class MobTorchTrackingListener implements Listener {
         }
 
         Monster monster = (Monster) event.getEntity();
-        
+
         CompletableFuture.runAsync(() -> {
             // 在主线程中设置怪物的视野范围
-            plugin.getServer().getScheduler().runTask(plugin, () -> 
-                monster.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(trackingRange));
+            plugin.getServer().getScheduler().runTask(plugin, () ->
+                    monster.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(trackingRange));
 
             // 寻找附近手持火把的玩家
             Player nearestTorchPlayer = null;

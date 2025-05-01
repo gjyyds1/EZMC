@@ -1,5 +1,6 @@
 package top.gjcraft.eZMC.managers;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -38,7 +39,7 @@ public class SunlightManager {
         this.triggerChance = config.getDouble("sunlight-event.trigger-chance", 0.3);
         this.threadPoolManager = ThreadPoolManager.getInstance(plugin);
         this.random = new Random();
-        
+
         // 初始化透明方块列表
         this.transparentBlocks = new HashSet<>();
         List<String> transparentBlocksList = config.getStringList("sunlight-event.transparent-blocks");
@@ -49,7 +50,7 @@ public class SunlightManager {
                 plugin.getLogger().warning("无效的方块类型: " + blockName);
             }
         }
-        
+
         // 添加默认透明方块
         if (transparentBlocks.isEmpty()) {
             transparentBlocks.add(Material.AIR);
@@ -75,7 +76,7 @@ public class SunlightManager {
 
     private void activateSunlightEvent() {
         isEventActive = true;
-        plugin.getServer().broadcastMessage("§c警告：烈日凌空！请寻找遮蔽物！");
+        plugin.getServer().broadcastMessage(ChatColor.RED + "警告：烈日凌空！请寻找遮蔽物！");
 
         // 启动检查玩家是否在阳光下的任务
         plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
@@ -87,7 +88,7 @@ public class SunlightManager {
         // 设置事件结束时间
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             isEventActive = false;
-            plugin.getServer().broadcastMessage("§a烈日事件结束了！");
+            plugin.getServer().broadcastMessage(ChatColor.GREEN + "烈日事件结束了！");
         }, burnDuration * 20L);
     }
 
@@ -105,7 +106,7 @@ public class SunlightManager {
         // 检查玩家上方是否有遮挡
         Block block = player.getLocation().getBlock();
         boolean isExposed = true;
-        
+
         for (int y = block.getY() + 1; y < player.getWorld().getMaxHeight(); y++) {
             Block blockAbove = player.getWorld().getBlockAt(block.getX(), y, block.getZ());
             if (!transparentBlocks.contains(blockAbove.getType())) {
@@ -118,9 +119,5 @@ public class SunlightManager {
         if (isExposed && !player.isInWater()) {
             player.setFireTicks(60); // 点燃3秒
         }
-    }
-
-    public boolean isEventActive() {
-        return isEventActive;
     }
 }

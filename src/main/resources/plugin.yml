@@ -10,7 +10,7 @@ commands:
   ezmc:
     description: EZMC插件主命令
     usage: /ezmc <giveup|reload>
-    aliases: [ez]
+    aliases: [ ez ]
 
 permissions:
   ezmc.admin.reload:
